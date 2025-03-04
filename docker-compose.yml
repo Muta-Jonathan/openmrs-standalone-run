@@ -1,0 +1,45 @@
+services:
+  mysql-db:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: openmrs-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin123
+      MYSQL_DATABASE: openmrs
+      MYSQL_USER: openmrs
+      MYSQL_PASSWORD: Admin123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pAdmin123"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
+  openmrs:
+    image: ${OPENMRS_IMAGE:-openmrs/openmrs-reference-application-distro:uat}  # Default to RefApp UAT
+    platform: linux/amd64
+    container_name: openmrs-app
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql-db
+      DB_DATABASE: openmrs
+      DB_USERNAME: openmrs
+      DB_PASSWORD: Admin123
+      DB_CREATE_TABLES: "true"
+      DB_AUTO_UPDATE: "true"
+      MODULE_WEB_ADMIN: "true"
+    ports:
+      - "8080:8080"
+    volumes:
+      - openmrs-data:/usr/local/tomcat/.OpenMRS
+    restart: always
+
+volumes:
+  mysql-data:
+  openmrs-data:
