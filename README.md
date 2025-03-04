@@ -7,8 +7,13 @@ Run OpenMRS with one click using Docker.
 - Administrative privileges (to install Docker if needed).
 
 ## How to Use
-1. Download and unzip `openmrs-easy-run.zip`.
+1. Download and unzip `openmrs-standalone-run.zip`.
 2. Double-click `start-openmrs.bat` (Windows) or `start-openmrs.sh` (MacOS/Linux).
+3. 
+   **For Mac users**: Open a terminal in the unzipped folder and run the following command to make the script executable:
+   ```bash
+   chmod +x start-openmrs.sh
+   chmod +x stop-openmrs.sh
 3. If Docker isn’t installed, the script will attempt to install it (follow prompts).
 4. Select an OpenMRS version from the menu:
     - 1) Platform 2.6.14
